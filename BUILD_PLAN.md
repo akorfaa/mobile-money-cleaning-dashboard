@@ -31,7 +31,7 @@ an exploration script (`scripts/explore_raw.py`) confirming shape/dtypes and the
 known anomalies (balance mismatches, isFraud vs isFlaggedFraud disagreement),
 `.gitignore`, git init + first commit.
 
-- [ ] Not started
+- [x] Done
 
 ### Session 1 — Cleaning script with validation rules (60–90 min)
 **Goal:** A standalone `scripts/clean.py` that reads the raw sample, applies named
