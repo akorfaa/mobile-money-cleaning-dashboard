@@ -74,10 +74,14 @@ at least one chart and one summary table).
 **Why it matters:** The analysis proves you can read numbers and say something
 true and specific about them. The dashboard proves you can hand that analysis
 to someone else to explore themselves, instead of them trusting your slides.
-**Covers:** `analysis/findings.md`, Streamlit app (`app.py`) with cached data
-loading, filters, at least one chart, running it locally.
+**Covers:** `analysis/findings.md` (3 findings backed by exact numbers from
+`scripts/analyze.py`), Streamlit app (`app.py`) with cached data loading,
+sidebar filters (type, amount range, fraud status), a KPI row, a stacked
+bar chart, a summary table, and a data-quality expander surfacing the
+quarantined rows instead of hiding them. Confirmed running locally at
+localhost:8501.
 
-- [ ] Not started
+- [x] Done
 
 ### Session 3 — Deploy, README, write-up, wrap-up (45–75 min)
 **Goal:** The dashboard live on Streamlit Community Cloud with a real URL,

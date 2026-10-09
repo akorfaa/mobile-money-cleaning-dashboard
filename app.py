@@ -1,32 +1,41 @@
-"""Session 2: an interactive dashboard over the cleaned PaySim sample.
+"""Session 2/3: an interactive dashboard over the PaySim sample.
+
+Derives the clean/quarantined split in memory from data/sample_raw.csv using
+the same rules as scripts/clean.py, rather than reading data/cleaned.csv and
+data/quarantined.csv from disk - those two files are gitignored (derived
+output), so a deployed copy of this app wouldn't have them. One source of
+truth (sample_raw.csv, committed to git) and one set of rules (scripts/clean.py),
+used by both the CLI script and this dashboard.
 
 Run with: streamlit run app.py
 """
 import pandas as pd
 import streamlit as st
 
-CLEANED_PATH = "data/cleaned.csv"
-QUARANTINED_PATH = "data/quarantined.csv"
+from scripts.clean import partition
+
+SAMPLE_PATH = "data/sample_raw.csv"
 
 st.set_page_config(page_title="Mobile Money Transactions", layout="wide")
 
 
 @st.cache_data
 def load_data():
-    """Cached so Streamlit only re-reads the CSVs when the files actually
-    change, not on every filter click.
+    """Cached so Streamlit only re-runs this (reading the CSV + applying
+    every validation rule) when the underlying file actually changes, not on
+    every filter click.
     """
-    cleaned = pd.read_csv(CLEANED_PATH)
-    quarantined = pd.read_csv(QUARANTINED_PATH)
-    return cleaned, quarantined
+    df = pd.read_csv(SAMPLE_PATH)
+    return partition(df)
 
 
 cleaned, quarantined = load_data()
 
 st.title("Mobile Money Transactions")
 st.caption(
-    "PaySim sample, cleaned via scripts/clean.py. Amounts are unitless "
-    "(synthetic data), not a real currency."
+    "PaySim sample, cleaned via scripts/clean.py's validation rules (run "
+    "live on load). Amounts are unitless (synthetic data), not a real "
+    "currency."
 )
 
 # --- Sidebar filters ------------------------------------------------------
@@ -94,7 +103,7 @@ summary = filtered.groupby("type").agg(
     fraud_count=("isFraud", "sum"),
 )
 summary["fraud_rate"] = (summary["fraud_count"] / summary["count"]).map("{:.2%}".format)
-st.dataframe(summary, use_container_width=True)
+st.dataframe(summary, width="stretch")
 
 # --- Data quality transparency ------------------------------------------
 
