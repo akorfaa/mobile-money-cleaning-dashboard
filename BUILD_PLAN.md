@@ -88,12 +88,21 @@ localhost:8501.
 finished README, and a decision-focused write-up for LinkedIn/portfolio.
 **Why it matters:** Same bar as Project 1 — a project that only runs on your
 machine is a much weaker portfolio piece than one with a live link.
-**Covers:** Streamlit Community Cloud account + deploy, `requirements.txt`
-pinned for deploy, README (problem, approach, tech stack, how to run locally,
-what I'd improve), `docs/writeup.md`, closing `_docs/progress-log.md` entry,
+**Covers:** Streamlit Community Cloud deploy (live at
+https://mobile-money-cleaning.streamlit.app), GitHub repo
+(https://github.com/akorfaa/mobile-money-cleaning-dashboard), README
+(problem, approach, tech stack, how to run locally, what I'd improve),
+`docs/writeup.md`, closing `_docs/progress-log.md` entry,
 `_docs/roadmap-status.md` update.
 
-- [ ] Not started
+**Mid-session fix:** `app.py` originally read `data/cleaned.csv` and
+`data/quarantined.csv` from disk, but those are gitignored (derived output)
+- a deployed copy would have crashed with no such files. Refactored to
+derive the clean/quarantine split in memory from `data/sample_raw.csv`
+(committed) using the same `partition()` function as the CLI script, so
+there's one source of truth instead of two copies that could drift apart.
+
+- [x] Done
 
 ---
 
@@ -103,10 +112,10 @@ Noticeably lighter than Project 1 — this is meant to be a palate-cleanser that
 proves a different skill, not a second marathon.
 
 ## Definition of done for this project
-- [ ] `scripts/clean.py` runs end to end and fails loudly on bad data (proven by tests)
-- [ ] Pytest suite covers every validation rule, including rows engineered to fail each one
-- [ ] `analysis/findings.md` has 2-3 findings, each backed by a specific number
-- [ ] Streamlit dashboard runs locally with working filters and at least one chart
-- [ ] Live, working Streamlit Community Cloud deployment URL
-- [ ] README complete (problem, approach, tech stack, how to run, what I'd improve)
-- [ ] Short write-up drafted for LinkedIn/portfolio site
+- [x] `scripts/clean.py` runs end to end and fails loudly on bad data (proven by tests)
+- [x] Pytest suite covers every validation rule, including rows engineered to fail each one
+- [x] `analysis/findings.md` has 2-3 findings, each backed by a specific number
+- [x] Streamlit dashboard runs locally with working filters and at least one chart
+- [x] Live, working Streamlit Community Cloud deployment URL
+- [x] README complete (problem, approach, tech stack, how to run, what I'd improve)
+- [x] Short write-up drafted for LinkedIn/portfolio site
