@@ -42,12 +42,29 @@ scale of each problem before deciding how to handle it.
 **Why it matters:** "Clean the data" without rules you can name and test is just
 vibes. This is the core skill this project proves — validation logic + decisions
 documented, not a silent `.dropna()`.
-**Covers:** rule design (balance-math rule, fraud-flag disagreement rule, impossible-value
-rule, duplicate-transaction rule), a `ValidationError` type carrying which rule
-and which rows failed, a `--report` vs `--strict` CLI mode, pytest tests with
+**Covers:** 5 named rules (valid transaction type, no negative values,
+flagged-fraud contract, origin-balance consistency, no duplicate
+transactions), a `--mode report` vs `--mode strict` CLI, pytest tests with
 rows engineered to fail each rule individually.
 
-- [ ] Not started
+**Design change made mid-session:** the original plan was "raise and refuse
+to write output if any rule fails." Real data at this scale never hits zero
+violations, so that design would never succeed. Replaced with a
+clean/quarantine split: `data/cleaned.csv` (every rule passed) and
+`data/quarantined.csv` (failed at least one rule, with a `failed_rules`
+column naming which). Still "fails loudly" - every bad row is visible and
+labeled - just doesn't block the whole pipeline.
+
+**Two findings from the real data (both candidates for Session 2):**
+- `no_negative_values`: 16 violations, all identical in shape - $0.00
+  CASH_OUT transactions - and all 16 are fraud (100%, though n=16 is too
+  small to generalize from alone).
+- `origin_balance_consistency`: 18,777 violations (17.35% of the sample).
+  Counterintuitively, fraud rate among these rows is 0.11% vs 7.59%
+  overall - balance mismatches are NOT a fraud signal, just an unexplained
+  (and not rounding-sized - median diff ~160,000) data-quality pattern.
+
+- [x] Done
 
 ### Session 2 — Analysis + Streamlit dashboard (60–90 min)
 **Goal:** A short written analysis with 2–3 findings backed by specific numbers
